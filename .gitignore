@@ -1,0 +1,9 @@
+# Ignore Visual Studio temp files
+.vs/
+
+
+# Ignore build output directories
+[Dd]ebug/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
