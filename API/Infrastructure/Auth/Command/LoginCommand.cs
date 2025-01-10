@@ -22,7 +22,8 @@ namespace API.Infrastructure.Auth.Command
     {
         public Guid UserId { get; set; }
         public string UserName { get; set; } = string.Empty;
-        public string Token {  get; set; }
+        public string AccessToken { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
     }
         
 
@@ -37,10 +38,35 @@ namespace API.Infrastructure.Auth.Command
             _mediator = mediator;
         }
 
-        public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<LoginResponse> Handle(LoginCommand loginRequest, CancellationToken cancellationToken)
         {
-            // validate user
-            var user = _dbContext.Users.FirstOrDefault(x => x.UserName == request.UserName);
+            LoginResponse loginResponse = new();
+
+            var user = _dbContext.Users.FirstOrDefault(x => x.UserName == loginRequest.UserName);
+
+            var validationResponse = ValidateUser(user, loginRequest.Password);
+            if (!validationResponse.Success)
+            {
+                return validationResponse;
+            }
+
+            return CreateLoginResponse(user);
+            
+        }
+        private static string GenerateToken(AppUser user)
+        {
+            //generate token
+            var token = "token";
+            return token;
+        }
+        private static string GenerateRefreshToken()
+        {
+            //generate token
+            var refreshToken = "refresh-token";
+            return refreshToken;
+        }
+        private LoginResponse ValidateUser(AppUser? user, string password)
+        {
             if (user is null)
             {
                 return new LoginResponse
@@ -49,23 +75,27 @@ namespace API.Infrastructure.Auth.Command
                     Message = "User not found"
                 };
             }
-
-            var loginResponse = new LoginResponse
+            if (user.Password != password)
+            {
+                return new LoginResponse
+                {
+                    Success = false,
+                    Message = "Incorrect password"
+                };
+            }
+            return new LoginResponse{ Success = true };
+        }
+        private LoginResponse CreateLoginResponse(AppUser user)
+        {
+            return new LoginResponse
             {
                 Success = true,
                 Message = "Successfully logged in",
                 UserId = user.Id,
                 UserName = user.UserName,
-                Token = GenerateToken(user)
+                AccessToken = GenerateToken(user), 
+                RefreshToken = GenerateRefreshToken() 
             };
-
-            return loginResponse;
-        }
-        private static string GenerateToken(AppUser user)
-        {
-            //generate token
-            var token = "token";
-            return token;
         }
     }
     public class LoginCommandValidator : AbstractValidator<LoginCommand>
