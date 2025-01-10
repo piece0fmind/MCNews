@@ -1,4 +1,5 @@
 ﻿using API.Domain;
+using API.Infrastructure;
 using API.Shared;
 using FluentValidation;
 using MediatR;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.Infrastructure.Auth.Command
+namespace API.Features.Auth.Command
 {
     public class LoginCommand : IRequest<LoginResponse>
     {
@@ -25,7 +26,7 @@ namespace API.Infrastructure.Auth.Command
         public string AccessToken { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;
     }
-        
+
 
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
     {
@@ -51,7 +52,7 @@ namespace API.Infrastructure.Auth.Command
             }
 
             return CreateLoginResponse(user);
-            
+
         }
         private static string GenerateToken(AppUser user)
         {
@@ -83,7 +84,7 @@ namespace API.Infrastructure.Auth.Command
                     Message = "Incorrect password"
                 };
             }
-            return new LoginResponse{ Success = true };
+            return new LoginResponse { Success = true };
         }
         private LoginResponse CreateLoginResponse(AppUser user)
         {
@@ -93,8 +94,8 @@ namespace API.Infrastructure.Auth.Command
                 Message = "Successfully logged in",
                 UserId = user.Id,
                 UserName = user.UserName,
-                AccessToken = GenerateToken(user), 
-                RefreshToken = GenerateRefreshToken() 
+                AccessToken = GenerateToken(user),
+                RefreshToken = GenerateRefreshToken()
             };
         }
     }
@@ -106,5 +107,5 @@ namespace API.Infrastructure.Auth.Command
             RuleFor(x => x.Password).NotEmpty().WithMessage("Password is required.");
         }
     }
-    
+
 }
