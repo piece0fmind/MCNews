@@ -72,7 +72,9 @@ namespace API.Infrastructure.Auth.Command
     {
         public LoginCommandValidator()
         {
-            throw new NotImplementedException();
+            RuleFor(x => x.UserName).NotEmpty().WithMessage("Username is required.");
+            RuleFor(x => x.Password).NotEmpty().WithMessage("Password is required.");
         }
     }
+    
 }
