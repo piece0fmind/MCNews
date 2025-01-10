@@ -1,5 +1,5 @@
+using API.Features.Auth.Command;
 using API.Infrastructure;
-using API.Infrastructure.Auth.Command;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
