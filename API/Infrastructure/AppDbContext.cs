@@ -1,4 +1,5 @@
 ﻿using API.Domain;
+using Application.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace API.Infrastructure
         {
         }
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }
