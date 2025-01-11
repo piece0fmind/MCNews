@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace API.Migrations
+namespace Application.Migrations
 {
     /// <inheritdoc />
     public partial class Delete_Refresh_Token : Migration

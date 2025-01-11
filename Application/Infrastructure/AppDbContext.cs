@@ -1,4 +1,4 @@
-﻿using API.Domain;
+﻿
 using Application.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.Infrastructure
+namespace Application.Infrastructure
 {
     public class AppDbContext : DbContext
     {

@@ -1,6 +1,7 @@
-using API.Features.Auth.Command;
-using API.Infrastructure;
+
+using Application.Features.Auth.Command;
 using Application.Features.Auth.Services;
+using Application.Infrastructure;
 using Application.Shared;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

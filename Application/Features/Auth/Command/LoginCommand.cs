@@ -1,8 +1,7 @@
-﻿using API.Domain;
-using API.Infrastructure;
-using API.Shared;
+﻿
 using Application.Domain;
 using Application.Features.Auth.Services;
+using Application.Infrastructure;
 using Application.Shared;
 using FluentValidation;
 using MediatR;
@@ -22,7 +21,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.Features.Auth.Command
+namespace Application.Features.Auth.Command
 {
     public class LoginCommand : IRequest<LoginResponse>
     {

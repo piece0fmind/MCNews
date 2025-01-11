@@ -1,6 +1,7 @@
 ﻿
-using API.Features.Auth.Command;
+using Application.Features.Auth.Command;
 using Application.Features.Auth.RefreshToken.Command;
+using Application.Features.Auth.Register;
 using Application.Features.Auth.RevokeToken.Command;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

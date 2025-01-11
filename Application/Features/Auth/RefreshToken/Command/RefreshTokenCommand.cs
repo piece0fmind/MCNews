@@ -1,7 +1,6 @@
-﻿using API.Domain;
-using API.Infrastructure;
-using API.Shared;
+﻿
 using Application.Features.Auth.Services;
+using Application.Infrastructure;
 using Application.Shared;
 using FluentValidation;
 using MediatR;

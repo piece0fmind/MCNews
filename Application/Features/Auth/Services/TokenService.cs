@@ -1,7 +1,6 @@
-﻿using API.Domain;
-using API.Infrastructure;
-using API.Shared;
+﻿
 using Application.Domain;
+using Application.Infrastructure;
 using Application.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
