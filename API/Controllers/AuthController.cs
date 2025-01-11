@@ -1,10 +1,11 @@
-﻿using API.Features.Auth.Command;
+﻿
+using API.Features.Auth.Command;
 using Application.Features.Auth.RefreshToken.Command;
 using Application.Features.Auth.RevokeToken.Command;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Application.Controllers
+namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,6 +16,7 @@ namespace Application.Controllers
         {
             _mediator = mediator;
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)

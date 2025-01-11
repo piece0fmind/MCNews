@@ -1,5 +1,5 @@
 ﻿
-namespace API.Domain
+namespace Application.Domain
 {
     public class AppUser 
     {
