@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace API.Migrations
+namespace Application.Migrations
 {
     /// <inheritdoc />
     public partial class AddedUserName : Migration

@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.Shared
 {
-    public class ApiResponse 
+    public class ApplicationConstants
     {
-        public bool Success { get; set; } = false;
-        public string Message { get; set; } = string.Empty;
+        public const string DefaultRole = "User";
     }
-       
 }

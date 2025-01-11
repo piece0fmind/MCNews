@@ -1,6 +1,7 @@
-﻿using API.Infrastructure;
-using API.Shared;
+﻿
 using Application.Features.Auth.Services;
+using Application.Infrastructure;
+using Application.Shared;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -36,7 +37,7 @@ namespace Application.Features.Auth.RevokeToken.Command
             try
             {
                 await _tokenService.RevokeTokenAsync(request.Token, request.UserId, cancellationToken);
-                return new ApiResponse { Success = true, Message = "Logged out successfully" };
+                return new ApiResponse { Success = true, Message = "Logged out successfully." };
             }
             catch (InvalidOperationException ex)
             {

@@ -1,5 +1,5 @@
-﻿using API.Domain;
-using Application.Shared;
+﻿
+using Application.Domain;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;

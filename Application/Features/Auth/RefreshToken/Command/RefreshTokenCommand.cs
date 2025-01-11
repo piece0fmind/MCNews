@@ -1,7 +1,6 @@
-﻿using API.Domain;
-using API.Infrastructure;
-using API.Shared;
+﻿
 using Application.Features.Auth.Services;
+using Application.Infrastructure;
 using Application.Shared;
 using FluentValidation;
 using MediatR;
@@ -60,7 +59,7 @@ namespace Application.Features.Auth.RefreshToken.Command
                 return new RefreshTokenResponse
                 {
                     Success = false,
-                    Message = "Invalid or revoked token"
+                    Message = "Invalid or revoked token."
                 };
             }
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == validToken.UserId);
@@ -69,7 +68,7 @@ namespace Application.Features.Auth.RefreshToken.Command
                 return new RefreshTokenResponse
                 {
                     Success = false,
-                    Message = "User not found"
+                    Message = "User not found."
                 };
             }
             var accessToken = _tokenService.GenerateToken(user);
@@ -80,10 +79,10 @@ namespace Application.Features.Auth.RefreshToken.Command
                 AccessToken = accessToken
             };
         }
-        
+
         public class RefreshTokenCommandValidator : AbstractValidator<RefreshTokenCommand>
         {
-            public RefreshTokenCommandValidator() 
+            public RefreshTokenCommandValidator()
             {
                 RuleFor(x => x.RefreshToken).NotEmpty().WithMessage("Token is required.");
             }
