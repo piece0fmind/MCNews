@@ -1,13 +1,24 @@
 ﻿using API.Domain;
 using API.Infrastructure;
 using API.Shared;
+using Application.Domain;
+using Application.Features.Auth.Services;
+using Application.Shared;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,45 +38,47 @@ namespace API.Features.Auth.Command
         public string RefreshToken { get; set; } = string.Empty;
     }
 
-
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponse>
     {
         private readonly AppDbContext _dbContext;
         private readonly IMediator _mediator;
-
-        public LoginCommandHandler(AppDbContext dbContext, IMediator mediator)
+        private readonly IConfiguration _configuration;
+        private readonly JwtSettings _jwtSettings;
+        private readonly ITokenService _tokenService;
+        public LoginCommandHandler(
+            AppDbContext dbContext,
+            IMediator mediator,
+            IConfiguration configuration,
+            IOptions<JwtSettings> jwtSettings,
+            ITokenService tokenService)
         {
             _dbContext = dbContext;
             _mediator = mediator;
+            _configuration = configuration;
+            _jwtSettings = jwtSettings.Value;
+            _tokenService = tokenService;
         }
 
         public async Task<LoginResponse> Handle(LoginCommand loginRequest, CancellationToken cancellationToken)
         {
             LoginResponse loginResponse = new();
 
-            var user = _dbContext.Users.FirstOrDefault(x => x.UserName == loginRequest.UserName);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.UserName == loginRequest.UserName);
 
             var validationResponse = ValidateUser(user, loginRequest.Password);
             if (!validationResponse.Success)
             {
                 return validationResponse;
             }
+            var accessToken = _tokenService.GenerateToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
-            return CreateLoginResponse(user);
+            await _tokenService.SaveRefreshTokenAsync(user.Id, refreshToken, cancellationToken);
+
+            return CreateLoginResponse(user, accessToken, refreshToken);
 
         }
-        private static string GenerateToken(AppUser user)
-        {
-            //generate token
-            var token = "token";
-            return token;
-        }
-        private static string GenerateRefreshToken()
-        {
-            //generate token
-            var refreshToken = "refresh-token";
-            return refreshToken;
-        }
+        
         private LoginResponse ValidateUser(AppUser? user, string password)
         {
             if (user is null)
@@ -86,18 +99,19 @@ namespace API.Features.Auth.Command
             }
             return new LoginResponse { Success = true };
         }
-        private LoginResponse CreateLoginResponse(AppUser user)
+        private LoginResponse CreateLoginResponse(AppUser user, string accessToken, string refreshToken)
         {
             return new LoginResponse
             {
                 Success = true,
-                Message = "Successfully logged in",
+                Message = "Logged in successfully",
                 UserId = user.Id,
                 UserName = user.UserName,
-                AccessToken = GenerateToken(user),
-                RefreshToken = GenerateRefreshToken()
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
             };
         }
+        
     }
     public class LoginCommandValidator : AbstractValidator<LoginCommand>
     {
