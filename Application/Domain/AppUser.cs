@@ -14,5 +14,7 @@ namespace Application.Domain
         public bool IsEmailConfirmed { get; set; }
         public bool IsActive { get; set; }
 
+        public ICollection<UserRole> UserRoles { get; set; }
+
     }
 }
