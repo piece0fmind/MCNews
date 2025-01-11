@@ -69,9 +69,7 @@ namespace Application.Features.Auth.Services
 
         public async Task RevokeTokenAsync(string token, Guid userId, CancellationToken cancellationToken)
         {
-            var refreshToken = await _dbContext.RefreshTokens
-            .FirstOrDefaultAsync(x => x.Token == token && x.UserId == userId, cancellationToken);
-
+            var refreshToken = await ValidateRefreshTokenAsync(token, cancellationToken);
             if (refreshToken is null)
             {
                 throw new InvalidOperationException("Invalid token.");
@@ -82,11 +80,8 @@ namespace Application.Features.Auth.Services
                 throw new InvalidOperationException("Token is already revoked.");
             }
 
-            // Revoke the token
             refreshToken.IsRevoked = true;
             refreshToken.RevokedAt = DateTime.UtcNow;
-
-            // Save changes to the database
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
         public async Task<Domain.RefreshToken?> ValidateRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)

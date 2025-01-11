@@ -37,7 +37,7 @@ namespace Application.Features.Auth.RevokeToken.Command
             try
             {
                 await _tokenService.RevokeTokenAsync(request.Token, request.UserId, cancellationToken);
-                return new ApiResponse { Success = true, Message = "Logged out successfully" };
+                return new ApiResponse { Success = true, Message = "Logged out successfully." };
             }
             catch (InvalidOperationException ex)
             {

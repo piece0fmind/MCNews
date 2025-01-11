@@ -85,7 +85,7 @@ namespace Application.Features.Auth.Command
                 return new LoginResponse
                 {
                     Success = false,
-                    Message = "User not found"
+                    Message = "User not found."
                 };
             }
             if (user.Password != password)
@@ -93,17 +93,17 @@ namespace Application.Features.Auth.Command
                 return new LoginResponse
                 {
                     Success = false,
-                    Message = "Incorrect password"
+                    Message = "Incorrect password."
                 };
             }
             return new LoginResponse { Success = true };
         }
-        private LoginResponse CreateLoginResponse(AppUser user, string accessToken, string refreshToken)
+        private static LoginResponse CreateLoginResponse(AppUser user, string accessToken, string refreshToken)
         {
             return new LoginResponse
             {
                 Success = true,
-                Message = "Logged in successfully",
+                Message = "Logged in successfully.",
                 UserId = user.Id,
                 UserName = user.UserName,
                 AccessToken = accessToken,

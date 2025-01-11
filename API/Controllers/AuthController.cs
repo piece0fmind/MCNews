@@ -18,6 +18,12 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterUserCommand request)
+        {
+            var response = await _mediator.Send(request);
+            return Ok(response);
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)
