@@ -2,6 +2,7 @@
 using Application.Domain;
 using Application.Features.Auth.Services;
 using Application.Infrastructure;
+using Application.Infrastructure.PasswordValidator;
 using Application.Shared;
 using FluentValidation;
 using MediatR;
@@ -44,18 +45,24 @@ namespace Application.Features.Auth.Command
         private readonly IConfiguration _configuration;
         private readonly JwtSettings _jwtSettings;
         private readonly ITokenService _tokenService;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly IPasswordValidator _passwordValidator;
         public LoginCommandHandler(
             AppDbContext dbContext,
             IMediator mediator,
             IConfiguration configuration,
             IOptions<JwtSettings> jwtSettings,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            IPasswordHasher passwordHasher,
+            IPasswordValidator passwordValidator)
         {
             _dbContext = dbContext;
             _mediator = mediator;
             _configuration = configuration;
             _jwtSettings = jwtSettings.Value;
             _tokenService = tokenService;
+            _passwordHasher = passwordHasher;
+            _passwordValidator = passwordValidator;
         }
 
         public async Task<LoginResponse> Handle(LoginCommand loginRequest, CancellationToken cancellationToken)
@@ -88,7 +95,7 @@ namespace Application.Features.Auth.Command
                     Message = "User not found."
                 };
             }
-            if (user.Password != password)
+            if (!_passwordValidator.ValidatePassword(password, user.Password))
             {
                 return new LoginResponse
                 {
