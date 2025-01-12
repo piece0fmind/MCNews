@@ -3,6 +3,7 @@ using Application.Features.Auth.Command;
 using Application.Features.Auth.Register;
 using Application.Features.Auth.Services;
 using Application.Infrastructure;
+using Application.Infrastructure.PasswordValidator;
 using Application.Shared;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -21,6 +22,8 @@ builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof
 // Add services to the container.
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IPasswordValidator, PasswordValidator>();
 
 builder.Services.AddControllers();
 builder.Services.AddControllers()
