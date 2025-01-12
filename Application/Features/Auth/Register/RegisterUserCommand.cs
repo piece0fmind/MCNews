@@ -36,14 +36,17 @@ namespace Application.Features.Auth.Register
         private readonly AppDbContext _dbContext;
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
+        private readonly IPasswordHasher _passwordHasher;
         public RegisterUserHandler(
             AppDbContext dbContext,
             IMediator mediator,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IPasswordHasher passwordHasher)
         {
             _dbContext = dbContext;
             _mediator = mediator;
             _configuration = configuration;
+            _passwordHasher = passwordHasher;
         }
         public async Task<ApiResponse> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
@@ -100,7 +103,7 @@ namespace Application.Features.Auth.Register
                 Email = request.Email.Trim(),
                 UserName = request.UserName.Trim(),
                 Phone = request.Phone,
-                Password = request.Password, // need to hash
+                Password = _passwordHasher.Hash(request.Password), 
                 IsActive = true,
                 IsEmailConfirmed = true,
                 CreatedDate = DateTime.UtcNow
